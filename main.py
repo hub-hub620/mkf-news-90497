@@ -285,6 +285,18 @@ def draw():
     text(t, m + (W - 2 * m - textw(t, 1)) // 2, y + 8, PAPER, 1)
     y += strip_h + 12
 
+    # ---- GTA VI hero splash --------------------------------------------
+    hero_h = 96
+    rect(m, y, W - 2 * m, hero_h, INK)
+    rect(m, y, W - 2 * m, 4, RED)
+    t1 = "GRAND THEFT AUTO VI OUT TODAY"
+    text(t1, m + 18, y + 14, WHITE, 3)
+    t2 = "PS5 and Xbox launch consoles sell out within hours worldwide"
+    text(t2, m + 18, y + 46, (228, 220, 200), 2)
+    t3 = "Largest entertainment launch ever recorded  *  queues form overnight"
+    text(t3, m + 18, y + 70, GOLD, 1)
+    y += hero_h + 12
+
     # ---- headline grid -------------------------------------------------
     body_top = y
     bottom = H - 26
@@ -299,13 +311,14 @@ def draw():
     for ci, stories in enumerate(cols):
         x = m + ci * (col_w + gutter)
         cy = body_top
+        n = len(stories)
+        slot = (bottom - body_top) // max(1, n)
         for si, (tag, body, accent, lead) in enumerate(stories):
-            scale = 3 if lead else 2
-            need = 22 + scale * 7 + 10 + 12
-            if cy + need > bottom + 12:
-                break
-            draw_story(x, cy, col_w, tag, body, accent, lead, scale)
-            cy += need + 2
+            scale = 2 if lead else 2
+            if lead and slot >= 22 + 3 * 7 + 10 + 12:
+                scale = 3
+            draw_story(x, cy, slot, col_w, tag, body, accent, lead, scale)
+            cy += slot
 
     # ---- footer --------------------------------------------------------
     hline(m, H - 22, W - 2 * m, RULE)
@@ -313,8 +326,8 @@ def draw():
     text(ft, (W - textw(ft, 1)) // 2, H - 16, GREY, 1)
 
 
-def draw_story(x, y, w, tag, body, accent, lead, scale):
-    boxh = 22 + scale * 7 + 10 + 12
+def draw_story(x, y, h, w, tag, body, accent, lead, scale):
+    boxh = h - 2
     rect_outline(x, y, w, boxh, RULE, 1)
     rect(x, y, w, 3, accent)
 
